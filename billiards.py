@@ -3,6 +3,7 @@ import sys
 import pygame
 from settings import Settings
 from ball import Ball
+from pool_table import PoolTable
 from cue_stick import CueStick
 
 class Billiards:
@@ -16,23 +17,17 @@ class Billiards:
         pygame.display.set_caption("Billiards")
         self.screen_rect = self.screen.get_rect()
 
-        # draw pool table onto screen
-        self.bg_img = pygame.image.load('images/Billiards/Pool_Table_Landscape.png').convert()
-        self.bg_img = pygame.transform.smoothscale(self.bg_img, (1000, 650))
-
-        #Center pool table image
-        self.table = self.bg_img.get_rect()
-        self.table.center = self.screen_rect.center
-        self.screen.blit(self.bg_img, self.table)
 
         self.ball = Ball(self)
         self.cue_stick = CueStick(self)
+        self.pool_table = PoolTable(self)
 
     def run_game(self):
         while True:
             self._check_events()
             self.ball.blitme()
             self.cue_stick.blitme()
+            self.pool_table.blitme()
 
     def _check_events(self):
         for event in pygame.event.get():
