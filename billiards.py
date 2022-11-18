@@ -3,6 +3,7 @@ import sys
 import pygame
 from settings import Settings
 from ball import Ball
+from cue_stick import CueStick
 
 class Billiards:
     def __init__(self):
@@ -25,11 +26,13 @@ class Billiards:
         self.screen.blit(self.bg_img, self.table)
 
         self.ball = Ball(self)
+        self.cue_stick = CueStick(self)
 
     def run_game(self):
         while True:
             self._check_events()
             self.ball.blitme()
+            self.cue_stick.blitme()
 
     def _check_events(self):
         for event in pygame.event.get():
