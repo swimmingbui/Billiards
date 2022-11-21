@@ -25,6 +25,7 @@ class Billiards:
     def run_game(self):
         while True:
             self._check_events()
+            self.screen.fill((0,0,0))
             self.pool_table.blitme()
             self.ball.blitme()
             self.cue_stick.blitme()
@@ -38,6 +39,9 @@ class Billiards:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
                     sys.exit()
+                if event.key == pygame.K_LEFT:
+                    self.cue_stick.update(1)
+                    print("update")
 
 
 
