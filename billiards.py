@@ -40,6 +40,9 @@ class Billiards:
                 if event.key == pygame.K_q:
                     sys.exit()
                 if event.key == pygame.K_LEFT:
+                    self.cue_stick.update(-1)
+                    print("update")
+                if event.key == pygame.K_RIGHT:
                     self.cue_stick.update(1)
                     print("update")
 
