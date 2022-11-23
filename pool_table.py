@@ -7,7 +7,7 @@ class PoolTable:
 
         # Load the table image and get its rect.
         self.table_img = pygame.image.load('images/Billiards/Pool_Table_Landscape.png')
-        self.table_img = pygame.transform.smoothscale(self.table_img, (1000, 650))
+        self.table_img = pygame.transform.smoothscale(self.table_img, (900, 550))
         self.table_rect = self.table_img.get_rect()
         self.table_rect.center = self.screen_rect.center
 
