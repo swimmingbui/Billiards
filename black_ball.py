@@ -10,9 +10,8 @@ class BlackBall:
         self.image = pygame.transform.smoothscale(self.image, (40, 40))
         self.ball_rect = self.image.get_rect()
 
-        #self.ball_rect.midright = self.screen_rect.midright
-
-        self.position = [222,115]
+        #position for where the black ball spawns
+        self.position = [400,200]
 
     def blitme(self):
         self.screen.blit(self.image, self.position)

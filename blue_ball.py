@@ -8,9 +8,9 @@ class BlueBall:
         # Load the ball image and get its rect.
         self.image = pygame.image.load('images/Billiards/blue_ball.png')
         self.image = pygame.transform.smoothscale(self.image, (30, 30))
-        self.ball_rect = self.image.get_rect()
+        self.rect = self.image.get_rect()
 
-        self.ball_rect.midright = self.screen_rect.midright
+        self.rect.midright = self.screen_rect.midright
 
         self.position = [800,300]
 

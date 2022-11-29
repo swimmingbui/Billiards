@@ -10,8 +10,8 @@ class Ball:
         self.image = pygame.image.load('images/Billiards/cue_ball.png')
         self.image = pygame.transform.smoothscale(self.image, (30, 30))
         self.ball_rect = self.image.get_rect()
+        self.ball_rect.center = (400, 350)
 
-        self.ball_rect.center = self.screen_rect.center
 
     def blitme(self):
         self.screen.blit(self.image, self.ball_rect)

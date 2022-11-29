@@ -9,6 +9,7 @@ from blue_ball import BlueBall
 from red_ball import RedBall
 from black_ball import BlackBall
 
+
 class Billiards:
     def __init__(self):
         pygame.init()
@@ -28,6 +29,10 @@ class Billiards:
         self.blue_ball = BlueBall(self)
         self.red_ball = RedBall(self)
         self.black_ball = BlackBall(self)
+
+        #Set up cue stick sound
+        self.Sound = pygame.mixer.Sound("sounds/cue_stick_move.wav")
+
 
     #draw pool table, ball, and cue stick
     def run_game(self):
@@ -52,9 +57,11 @@ class Billiards:
                     sys.exit()
                 #press left arrow to move cue stick left
                 if event.key == pygame.K_LEFT:
+                    pygame.mixer.Sound.play(self.Sound)
                     self.cue_stick.update(1)
                 #press right arrow to move cue stick left
                 if event.key == pygame.K_RIGHT:
+                    pygame.mixer.Sound.play(self.Sound)
                     self.cue_stick.update(-1)
 
 
