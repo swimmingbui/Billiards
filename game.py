@@ -10,9 +10,10 @@ pygame.init()
 #set dimensions for game window
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 678
+BOTTOM_PANEL = 50
 
 #game window
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT + BOTTOM_PANEL))
 pygame.display.set_caption("Billiards")
 
 #pymunk space
@@ -28,16 +29,26 @@ clock = pygame.time.Clock()
 FPS = 120
 
 #game variables
+lives = 3
 diameter = 36
+pocket_diameter = 66
 force = 0
 taking_shot = True
 powering_up = False
+cue_ball_potted = False
 max_force = 10000
 force_direction = 1
+potted_balls = []
 
 #colors
 BACKGROUND = (50,50,50)
 RED = (255, 0, 0)
+GREEN = (0, 110, 24)
+
+#fonts
+font = pygame.font.SysFont("Comic Sans MS", 30)
+large_font = pygame.font.SysFont("Comic Sans MS", 60)
+
 
 #load images
 cue_stick_image = pygame.image.load("images/cue_stick.png").convert_alpha()
@@ -48,6 +59,21 @@ ball_images = []
 for i in range(1,17):
     ball_image = pygame.image.load(f"images/ball_{i}.png").convert_alpha()
     ball_images.append(ball_image)
+
+#function for drawing text onto the screen
+def draw_text(text, font, text_color, x, y):
+    img = font.render(text, True, text_color)
+    screen.blit(img, (x,y))
+
+#create six pockets on table
+pockets = [
+  (55, 63),
+  (592, 48),
+  (1134, 64),
+  (55, 616),
+  (592, 629),
+  (1134, 616)
+]
 
 #pymunk objects consist of body and shape
 #function for creating balls
@@ -140,6 +166,7 @@ power_bar.fill(RED)
 #game loop
 run = True
 while run:
+    Sound1 = pygame.mixer.Sound("sounds/collisions/Audio/impactBell_heavy_000.ogg")
 
     clock.tick(FPS)
     space.step(1 / FPS)
@@ -149,6 +176,29 @@ while run:
 
     #draw pool table
     screen.blit(table_image, (0,0))
+
+    #check if any balls have been potted
+    for i, ball in enumerate(balls):
+        for pocket in pockets:
+            ball_x_distance = abs(ball.body.position[0] - pocket[0])
+            ball_y_distance = abs(ball.body.position[1] - pocket[1])
+            #gives distance between center of ball and center of pocket
+            ball_distance = math.sqrt((ball_x_distance ** 2) + (ball_y_distance ** 2))
+            if ball_distance <= pocket_diameter / 2:
+                #check if potted ball was the cue ball
+                if i == len(balls) - 1:
+                    lives -= 1
+                    cue_ball_potted = True
+                    ball.body.position = (-100, -100)
+                    ball.body.velocity = (0.0, 0.0)
+                else:
+                    space.remove(ball.body)
+                    balls.remove(ball)
+                    potted_balls.append(ball_images[i])
+                    ball_images.pop(i)
+
+
+
 
     #draw pool balls
     for i, ball in enumerate(balls):
@@ -165,6 +215,10 @@ while run:
 
     #draw cue stick
     if taking_shot == True:
+        #reposition cue ball if it is potted
+        if cue_ball_potted == True:
+            balls[-1].body.position = (888, SCREEN_HEIGHT / 2)
+            cue_ball_potted = False
         #calculate cue stick angle through mouse position
         mouse_position = pygame.mouse.get_pos()
         #reposition cue stick with cue ball
@@ -193,6 +247,17 @@ while run:
         force = 0
         force_direction = 1
 
+    #draw bottom panel
+    pygame.draw.rect(screen, BACKGROUND, (0, SCREEN_HEIGHT, SCREEN_WIDTH, BOTTOM_PANEL))
+    draw_text("LIVES: " + str(lives), font, GREEN, SCREEN_WIDTH - 200, SCREEN_HEIGHT + 10)
+
+    #draw potted balls in bottom panel
+    for i, ball in enumerate(potted_balls):
+        screen.blit(ball, (10 + ( i * 50), SCREEN_HEIGHT + 10 ))
+
+    #check for game over
+    if lives <= 0:
+        draw_text("GAME OVER", large_font, GREEN, SCREEN_WIDTH / 2 - 160, SCREEN_HEIGHT / 2 - 100)
 
     #check for events
     for event in pygame.event.get():
@@ -200,7 +265,9 @@ while run:
             powering_up = True
         #determine how hard to hit cue ball
         if event.type == pygame.MOUSEBUTTONUP and taking_shot == True:
+            pygame.mixer.Sound.play(Sound1)
             powering_up = False
+
         if event.type == pygame.QUIT:
             run = False
         elif event.type == pygame.KEYDOWN:
