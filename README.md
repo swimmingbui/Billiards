@@ -1,7 +1,7 @@
 # Thomas' Billiards
 ![img.png](img.png)
 ## How to Play
-- Your goal is to shoot all of the stripes and solids into the pockets
+- Your goal is to shoot all of the balls into the pockets
 - Start off with three lives
 - Potting the Cue Ball results in a lost of life
 - Use  your mouse pointer to aim the cue stick

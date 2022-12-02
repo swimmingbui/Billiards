@@ -51,6 +51,10 @@ WHITE = (255, 255, 255)
 font = pygame.font.SysFont("Comic Sans MS", 30)
 large_font = pygame.font.SysFont("Comic Sans MS", 60)
 
+#sounds
+Sound1 = pygame.mixer.Sound("sounds/collisions/Audio/impactGlass_medium_000.ogg")
+Sound2 = pygame.mixer.Sound("sounds/Sad_Violin.mp3")
+Sound3 = pygame.mixer.Sound("sounds/all_i_do_is_win.wav")
 
 #load images
 cue_stick_image = pygame.image.load("images/cue_stick.png").convert_alpha()
@@ -168,7 +172,7 @@ power_bar.fill(RED)
 #game loop
 run = True
 while run:
-    Sound1 = pygame.mixer.Sound("sounds/collisions/Audio/impactBell_heavy_000.ogg")
+
 
     clock.tick(FPS)
     space.step(1 / FPS)
@@ -260,12 +264,15 @@ while run:
     #check for game over
     if lives <= 0:
         screen.fill(RED)
-        draw_text("GAME OVER", large_font, WHITE, SCREEN_WIDTH / 2 - 160, SCREEN_HEIGHT / 2 - 100)
+        draw_text("GAME OVER :,)", large_font, WHITE, SCREEN_WIDTH / 2 - 160, SCREEN_HEIGHT / 2 - 100)
+        pygame.mixer.Sound.play(Sound2)
         game_running = False
 
     #check if all balls are potted
     if len(balls) == 1:
+        screen.fill(GREEN)
         draw_text("YOU WIN! :)", large_font, WHITE, SCREEN_WIDTH / 2 - 160, SCREEN_HEIGHT / 2 - 100)
+        pygame.mixer.Sound.play(Sound3)
         game_running = False
 
     #check for events
