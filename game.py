@@ -55,6 +55,7 @@ large_font = pygame.font.SysFont("Comic Sans MS", 60)
 Sound1 = pygame.mixer.Sound("sounds/collisions/Audio/impactGlass_medium_000.ogg")
 Sound2 = pygame.mixer.Sound("sounds/Sad_Violin.mp3")
 Sound3 = pygame.mixer.Sound("sounds/all_i_do_is_win.wav")
+Sound4 = pygame.mixer.Sound("sounds/game_music.mp3")
 
 #load images
 cue_stick_image = pygame.image.load("images/cue_stick.png").convert_alpha()
@@ -173,6 +174,8 @@ power_bar.fill(RED)
 run = True
 while run:
 
+    Sound4.play(-1)
+    Sound4.set_volume(0.1)
 
     clock.tick(FPS)
     space.step(1 / FPS)
@@ -265,14 +268,16 @@ while run:
     if lives <= 0:
         screen.fill(RED)
         draw_text("GAME OVER :,)", large_font, WHITE, SCREEN_WIDTH / 2 - 160, SCREEN_HEIGHT / 2 - 100)
-        pygame.mixer.Sound.play(Sound2)
+        Sound4.stop()
+        Sound2.play()
         game_running = False
 
     #check if all balls are potted
     if len(balls) == 1:
         screen.fill(GREEN)
         draw_text("YOU WIN! :)", large_font, WHITE, SCREEN_WIDTH / 2 - 160, SCREEN_HEIGHT / 2 - 100)
-        pygame.mixer.Sound.play(Sound3)
+        Sound4.stop()
+        Sound3.play()
         game_running = False
 
     #check for events
@@ -281,7 +286,8 @@ while run:
             powering_up = True
         #determine how hard to hit cue ball
         if event.type == pygame.MOUSEBUTTONUP and taking_shot == True:
-            pygame.mixer.Sound.play(Sound1)
+            Sound1.play()
+            Sound1.set_volume(15)
             powering_up = False
 
         if event.type == pygame.QUIT:
