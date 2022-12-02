@@ -36,6 +36,7 @@ force = 0
 taking_shot = True
 powering_up = False
 cue_ball_potted = False
+game_running = True
 max_force = 10000
 force_direction = 1
 potted_balls = []
@@ -44,6 +45,7 @@ potted_balls = []
 BACKGROUND = (50,50,50)
 RED = (255, 0, 0)
 GREEN = (0, 110, 24)
+WHITE = (255, 255, 255)
 
 #fonts
 font = pygame.font.SysFont("Comic Sans MS", 30)
@@ -214,7 +216,7 @@ while run:
             taking_shot = False
 
     #draw cue stick
-    if taking_shot == True:
+    if taking_shot == True and game_running == True:
         #reposition cue ball if it is potted
         if cue_ball_potted == True:
             balls[-1].body.position = (888, SCREEN_HEIGHT / 2)
@@ -231,7 +233,7 @@ while run:
         cue_stick.draw(screen)
 
     #power up cue stick
-    if powering_up == True:
+    if powering_up == True and game_running == True:
         force += 100 * force_direction
         if force >= max_force or force <= 0:
             force_direction *= -1
@@ -257,7 +259,13 @@ while run:
 
     #check for game over
     if lives <= 0:
-        draw_text("GAME OVER", large_font, GREEN, SCREEN_WIDTH / 2 - 160, SCREEN_HEIGHT / 2 - 100)
+        draw_text("GAME OVER", large_font, WHITE, SCREEN_WIDTH / 2 - 160, SCREEN_HEIGHT / 2 - 100)
+        game_running = False
+
+    #check if all balls are potted
+    if len(balls) == 1:
+        draw_text("YOU WIN! :)", large_font, WHITE, SCREEN_WIDTH / 2 - 160, SCREEN_HEIGHT / 2 - 100)
+        game_running = False
 
     #check for events
     for event in pygame.event.get():
@@ -271,8 +279,8 @@ while run:
         if event.type == pygame.QUIT:
             run = False
         elif event.type == pygame.KEYDOWN:
-            # press 0 to quit
-            if event.key == pygame.K_0:
+            # press q to quit
+            if event.key == pygame.K_q:
                 run = False
 
     #space.debug_draw(draw_options)
